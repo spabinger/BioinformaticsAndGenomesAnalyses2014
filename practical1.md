@@ -27,6 +27,10 @@ In this practical you will XXXX
 * Original data from [1000 genomes](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/NA10847/exome_alignment/)
 
 
+## More information
+XXXXX
+
+
 
 
 ## Exercise
