@@ -39,7 +39,7 @@ We assume that we have a properly mapped BAM file from quality check reads.
 
 How big is the BAM file
 
-    ls -lah <bam.file>
+    ls -lah <file.bam>
 
 View BAM file
 
@@ -48,11 +48,11 @@ View BAM file
 How many reads are in the BAM file?<br/>
 Is there another way to count the reads (check the samtools view parameters - look for -v)
    
-    samtools view <bam.file> | grep -v "^#" | wc -l
+    samtools view <file.bam> | grep -v "^#" | wc -l
     
 Sort BAM file
 
-    samtools sort tempfile.bam <sorted>
+    samtools sort <file.bam> <sorted>
     
 Index bam file
     
