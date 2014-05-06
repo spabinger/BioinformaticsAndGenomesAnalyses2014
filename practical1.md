@@ -1,11 +1,11 @@
-## Practical 1
+# Practical 1
 
 In this practical you will XXXX
 
 
 
 
-### Required tools
+## Required tools
 
 * SAMtools - samtools.sourceforge.net/‎
 * GATK - https://www.broadinstitute.org/gatk/download
@@ -22,17 +22,19 @@ In this practical you will XXXX
 * Varscan 2 (2.3.6) - http://varscan.sourceforge.net/
 
 
-### Data
+## Data
 
 * Original data from [1000 genomes](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/NA10847/exome_alignment/)
 
 
 
 
-exercise:
-
+## Exercise
 
 We assume that we have a properly mapped BAM file from quality check reads. 
+
+
+#### SAMtools
 
 
 How big is the BAM file
@@ -43,20 +45,69 @@ View BAM file
 
     samtools view <bam.file> | less
     
-How many reads are in the BAM file
-
+How many reads are in the BAM file?<br/>
+Is there another way to count the reads (check the samtools view parameters - look for -v)
+   
     samtools view <bam.file> | grep -v "^#" | wc -l
     
-Is there another way to count the reads (check the samtools view parameters - look for -v)
+Sort BAM file
+
+    samtools sort tempfile.bam <sorted>
+    
+Index bam file
+    
+    samtools index <sorted.bam>
+
+
+
+#### Qualimap
+
+
+
+
+
+#### Mark Duplicates
+
+
+
+
+
+#### SAMtools variant calling
+
+
+
+
+
+
+#### GATK variant calling
+
+
+
+
+#### FreeBayes variant calling
+
+
+
+#### Merge VCFs
+
+
+#### Compare VCFs ??? HOW???
+
+
+
+
+
+
+
+
+
+samtools/picard
 
 
 
 
 
 insert size metrics
-samtools/picard
-
-qualimap
 
 
 
@@ -65,11 +116,8 @@ Transform SAM to BAM
 transform to bam
 samtools'view'–Sb'input.sam'>'tempfile.bam'
 
-sort bam file
-samtools'sort'–f'tempfile.bam'o
 
-index bam file
-samtools'index'output.bam'
+
 
 
 Filtering%SAM/BAM%ﬁles%
