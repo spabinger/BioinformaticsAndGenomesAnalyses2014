@@ -65,10 +65,17 @@ Index bam file
 
 
 
+#### BAM file preparations
+
+
+
 
 #### Mark Duplicates
 
 
+
+
+how many reads removed
 
 
 
