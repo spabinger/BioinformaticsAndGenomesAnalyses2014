@@ -181,7 +181,21 @@ Web - SeattleAnnotation
 
 IGV display files
 
+
+ReadXplorer
+
+Download the ReadXplorer from
+http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer/access
+
+Unzip and start it
+
+
+
 vcf merge
+
+
+
+
 
 
 *) Multiple cores
