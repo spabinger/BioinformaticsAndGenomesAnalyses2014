@@ -41,24 +41,31 @@ We assume that we have a properly mapped BAM file from quality check reads.
 #### SAMtools
 
 
-How big is the BAM file
+__(*)__ How big is the BAM file
 
     ls -lah <file.bam>
 
-View BAM file
+__(*)__ View the BAM file
 
     samtools view <bam.file> | less
     
-How many reads are in the BAM file?<br/>
+__(*)__ How many reads are in the BAM file?<br/>
 Is there another way to count the reads (check the samtools view parameters - look for -v)
    
     samtools view <file.bam> | grep -v "^#" | wc -l
     
-Sort BAM file
+__(*)__ Answer the following questions by investigating the SAM file
+* What version of the human assembly was used to perform the alignments?
+* What version of bwa was used to align the reads?
+* What is the name of the first read?
+* At what position does the alignment of the read start?
+
+    
+__(*)__ Sort the BAM file
 
     samtools sort <file.bam> <sorted>
     
-Index bam file
+__(*)__ Index the bam file
     
     samtools index <sorted.bam>
 
