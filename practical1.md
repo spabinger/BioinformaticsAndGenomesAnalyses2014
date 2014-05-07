@@ -198,4 +198,26 @@ vcf merge
 
 
 
+
+
+
+
+
+
+Determine number of cores
+
+cat /proc/cpuinfo
+
+
+VCF Tools (vcf-annotate)
+ Soft filter variants file for these biases
+ Variants kept in the file – just annotated with potential bias affecting the
+variant
+
+
+
+
+
+How do the merged vcf files differ -> check the online documentation
+
 *) Multiple cores
