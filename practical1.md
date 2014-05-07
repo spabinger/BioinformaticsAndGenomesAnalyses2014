@@ -7,7 +7,7 @@ In this practical you will XXXX
 
 ## Required tools
 
-* SAMtools - samtools.sourceforge.net/‎
+* SAMtools - http://samtools.sourceforge.net/‎
 * GATK - https://www.broadinstitute.org/gatk/download
 * Picard - http://picard.sourceforge.net/command-line-overview.shtml
 * Annovar
@@ -15,27 +15,25 @@ In this practical you will XXXX
   * http://www.openbioinformatics.org/annovar/annovar_download.html
   * databases: (ljb23_all, 1000g2012apr, snp138)
 * Qualimap - http://qualimap.bioinfo.cipf.es/
-* Java (7)
+* Java (7) - http://www.oracle.com/technetwork/java/javase/downloads/index.html?ssSourceSiteId=otnjp
 * IGV - https://www.broadinstitute.org/igv/home
 * Freebayes - https://github.com/ekg/freebayes
 * VCFtools - http://vcftools.sourceforge.net/
 * Varscan 2 (2.3.6) - http://varscan.sourceforge.net/
 
 
-## Data
+## Information
 
 * Original data from [1000 genomes](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/NA10847/exome_alignment/)
-
-
-## More information
-XXXXX
-
 
 
 
 ## Exercise
 
-We assume that we have a properly mapped BAM file from quality check reads. 
+We assume that we have a properly mapped BAM file from quality checked reads.
+For some variant callers we use a target file ADDLINK to shorten variant calling time.
+
+__Important__ After each step inspect the generated output (cat, less, head, grep, ...).
 
 
 #### SAMtools
@@ -70,39 +68,103 @@ __(*)__ Index the bam file
     samtools index <sorted.bam>
 
 
+#### Alignment stats
+    samtools flagstat sorted.bam
+    samtools idxstats sorted.bam
+
+
 
 #### Qualimap
+__(*)__ Inspect the BAM file in qualimap
+    Open qualimap
+    Load the BAM file (BAM QC) -> start analysis
+    
+    
+#### Prepare reference genome
+__(*)__ prepare dict index
+    java -jar CreateSequenceDictionary.jar R=hg19.fasta O=hg19.dict
 
-
+__(*)__  prepare fai index
+     samtools faidx hg19.fasta 
 
 
 #### BAM file preparations
+__(*)__ Sort with Picard
+    
+    java -Xmx24g -Dsnappy.disable=true -jar SortSam.jar I=aln.bam O=sorted_picard.bam SORT_ORDER=coordinate
 
 
+__(*)__ Mark duplicates
+     
+    java -Xmx24g -Dsnappy.disable=true -jar MarkDuplicates.jar I=sorted_picard.bam O=dedup.bam M=metrics.txt
 
 
-#### Mark Duplicates
+__(*)__ Add ReadGroup
+    
+    java -Xmx24g -Dsnappy.disable=true -jar AddOrReplaceReadGroups.jar I= dedup.bam O=deduprg.bam RGID=group1 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=sample1
 
 
+__(*)__ Index with Picard
+    
+    java -Xmx24g -Dsnappy.disable=true -jar BuildBamIndex.jar I=deduprg.bam O=deduprg.bam.bai VALIDATION_STRINGENCY=SILENT
 
 
-how many reads removed
-
+__(*)__ Questions
+* How many reads were marked as duplicated?
+* What are the other sorting possibilities for SortSam?
 
 
 #### SAMtools variant calling
 
+     samtools mpileup -uf hg19.fasta deduprg.bam | bcftools view -vcg - > samtools.vcf
 
+#### FreeBayes variant calling
 
+     ./freebayes -f hg19.fasta -t target.bed -v freebayes.vcf deduprg.bam
 
 
 
 #### GATK variant calling
 
+__(*)__ Known indel sites are here specified as variables - either copy the whole path or use variables as well
+
+KNOWN_INDELS_1="1000G_phase1.indels.hg19.vcf"
+KNOWN_INDELS_2="Mills_and_1000G_gold_standard.indels.hg19.vcf"
+
+
+__(*)__ Realignment target creator
+
+    java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T RealignerTargetCreator -R hg19.fasta -nt 8 -L 01target.bed -I deduprg.bam -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o target_intervals.list
+
+__(*)__ Perform realignment
+#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T IndelRealigner -R hg19.fasta -I deduprg.bam -targetIntervals target_intervals.list -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o dedup_rg_real.bam
+
+
+__(*)__Base quality recalibration
+#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o recal_data_table.txt -L 01target.bed --maximum_cycle_value 800
+
+
+__(*)__second pass of recalibration
+#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o post_recal_data_table.txt -L 01target.bed --maximum_cycle_value 800 -BQSR recal_data_table.txt 
+
+
+__(*)__ generate before after plots
+## required R and ggplot2
+#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T AnalyzeCovariates -R ${GEN_REF} -L 01target.bed -before recal_data_table.txt -after post_recal_data_table.txt -plots recalibration_plots.pdf
+
+## check out the before and after plots
 
 
 
-#### FreeBayes variant calling
+## print reads
+java -Xmx24g -Dsnappy.disable=true -jar ${GATK_P} -T PrintReads -R ${GEN_REF} -L 01target.bed -I deduprgreal.bam -BQSR recal_data_table.txt -o dedup_rg_real_recal.bam
+
+
+## variant calling
+java -Xmx24g -Dsnappy.disable=true -jar ${GATK_P} -T HaplotypeCaller -R ${GEN_REF} -nct 8 -L 01target.bed -I dedup_rg_real_recal.bam --genotyping_mode DISCOVERY -o gatk.vcf
+
+
+
 
 
 
