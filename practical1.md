@@ -76,16 +76,19 @@ __(*)__ Index the bam file
 
 #### Qualimap
 __(*)__ Inspect the BAM file in qualimap
+    
     Open qualimap
     Load the BAM file (BAM QC) -> start analysis
     
     
 #### Prepare reference genome
-__(*)__ prepare dict index
+__(*)__ Prepare dict index
+    
     java -jar CreateSequenceDictionary.jar R=hg19.fasta O=hg19.dict
 
-__(*)__  prepare fai index
-     samtools faidx hg19.fasta 
+__(*)__ Prepare fai index
+    
+    samtools faidx hg19.fasta 
 
 
 #### BAM file preparations
@@ -128,60 +131,89 @@ __(*)__ Questions
 
 __(*)__ Known indel sites are here specified as variables - either copy the whole path or use variables as well
 
-KNOWN_INDELS_1="1000G_phase1.indels.hg19.vcf"
-KNOWN_INDELS_2="Mills_and_1000G_gold_standard.indels.hg19.vcf"
+    KNOWN_INDELS_1="1000G_phase1.indels.hg19.vcf"
+    KNOWN_INDELS_2="Mills_and_1000G_gold_standard.indels.hg19.vcf"
 
 
 __(*)__ Realignment target creator
 
-    java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T RealignerTargetCreator -R hg19.fasta -nt 8 -L 01target.bed -I deduprg.bam -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o target_intervals.list
+    java -Xmx8g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T RealignerTargetCreator -R hg19.fasta -nt 8 -L target.bed -I deduprg.bam -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o target_intervals.list
 
 __(*)__ Perform realignment
-#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T IndelRealigner -R hg19.fasta -I deduprg.bam -targetIntervals target_intervals.list -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o dedup_rg_real.bam
+    
+    java -Xmx8g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T IndelRealigner -R hg19.fasta -I deduprg.bam -targetIntervals target_intervals.list -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o dedup_rg_real.bam
 
 
-__(*)__Base quality recalibration
-#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o recal_data_table.txt -L 01target.bed --maximum_cycle_value 800
+__(*)__ Base quality recalibration
+    
+    java -Xmx8g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o recal_data_table.txt -L target.bed --maximum_cycle_value 800
 
 
-__(*)__second pass of recalibration
-#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o post_recal_data_table.txt -L 01target.bed --maximum_cycle_value 800 -BQSR recal_data_table.txt 
+__(*)__ Second pass of recalibration
+     
+     java -Xmx8g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o post_recal_data_table.txt -L target.bed --maximum_cycle_value 800 -BQSR recal_data_table.txt 
 
 
-__(*)__ generate before after plots
-## required R and ggplot2
-#java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T AnalyzeCovariates -R ${GEN_REF} -L 01target.bed -before recal_data_table.txt -after post_recal_data_table.txt -plots recalibration_plots.pdf
-
-## check out the before and after plots
-
-
-
-## print reads
-java -Xmx24g -Dsnappy.disable=true -jar ${GATK_P} -T PrintReads -R ${GEN_REF} -L 01target.bed -I deduprgreal.bam -BQSR recal_data_table.txt -o dedup_rg_real_recal.bam
-
-
-## variant calling
-java -Xmx24g -Dsnappy.disable=true -jar ${GATK_P} -T HaplotypeCaller -R ${GEN_REF} -nct 8 -L 01target.bed -I dedup_rg_real_recal.bam --genotyping_mode DISCOVERY -o gatk.vcf
+__(*)__ Generate before after plots (requires R and ggplot2)
+    
+    java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T AnalyzeCovariates -R hg19.fasta -L target.bed -before recal_data_table.txt -after post_recal_data_table.txt -plots recalibration_plots.pdf
 
 
 
+__(*)__ Print recalibrated reads
+    
+    java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T PrintReads -R hg19.fasta -L target.bed -I deduprgreal.bam -BQSR recal_data_table.txt -o dedup_rg_real_recal.bam
+
+
+__(*)__ Now do variant calling
+    
+    java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T HaplotypeCaller -R hg19.fasta -nct 8 -L target.bed -I dedup_rg_real_recal.bam --genotyping_mode DISCOVERY -o gatk.vcf
+
+__(*)__ Questions
+* Check out the before and after plots
+* 
 
 
 
-#### Merge VCFs
+#### Merge VCFs and VCF stats
+
+__(*)__ VCFlib - merge
+
+    vcfcombine freebayes.vcf gatk.vcf samtools.vcf > vcf_lib_merged.vcf
+
+__(*)__ VCFlib - stats - shown here for one VCF file - repeat for all 3
+
+    vcfstats freeb_call.vcf > freeb_call_vcf_lib_stats.txt
 
 
-#### Compare VCFs ??? HOW???
+
+__(*)__ VCFtools
+
+    export PERL5LIB=<full-path>/vcftools_0.1.12a/perl
+    export PATH=<full-path>/tabix/tabix-0.2.6:$PATH
+
+    ## Index (tabix) and pack files
+    cp gatk.vcf gatk_tab.vcf
+    bgzip gatk_tab.vcf
+    tabix -p vcf gatk_tab.vcf.gz
+
+    ## repeat for the other two VCF files
+
+    vcf-merge freebayes_tab.vcf.gz gatk_tab.vcf.gz samtools_tab.vcf.gz > vcf_tools_merged.vcf
+    vcf-stats freebayes_tab.vcf.gz > freebayes_tab_stats.txt
 
 
 
 
 
+#### Filter variants
+     
+     <full-path>/bcftools/vcfutils.pl varFilter -Q 20 -d 5 -D 200 samtools.vcf > samtools_filtered.vcf
+
+__(*)__ Questions
+* How many variants were filtered
 
 
-
-
-samtools/picard
 
 
 
