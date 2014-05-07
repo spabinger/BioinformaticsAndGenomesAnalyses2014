@@ -78,7 +78,10 @@ __(*)__ Index the bam file
 __(*)__ Inspect the BAM file in qualimap
     
     Open qualimap
-    Load the BAM file (BAM QC) -> start analysis
+    Load the BAM file (BAM QC) -> start analysis ---- Be sure to select the sorted BAM file
+    Check out the different pages
+    What does the "Coverage across Reference" tells you?
+    
     
     
 #### Prepare reference genome
@@ -94,22 +97,26 @@ __(*)__ Prepare fai index
 #### BAM file preparations
 __(*)__ Sort with Picard
     
-    java -Xmx24g -Dsnappy.disable=true -jar SortSam.jar I=aln.bam O=sorted_picard.bam SORT_ORDER=coordinate
+    java -Xmx8g -Dsnappy.disable=true -jar SortSam.jar I=aln.bam O=sorted_picard.bam SORT_ORDER=coordinate
 
 
 __(*)__ Mark duplicates
      
-    java -Xmx24g -Dsnappy.disable=true -jar MarkDuplicates.jar I=sorted_picard.bam O=dedup.bam M=metrics.txt
+    java -Xmx8g -Dsnappy.disable=true -jar MarkDuplicates.jar I=sorted_picard.bam O=dedup.bam M=metrics.txt
 
 
 __(*)__ Add ReadGroup
     
-    java -Xmx24g -Dsnappy.disable=true -jar AddOrReplaceReadGroups.jar I= dedup.bam O=deduprg.bam RGID=group1 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=sample1
+    java -Xmx8g -Dsnappy.disable=true -jar AddOrReplaceReadGroups.jar I= dedup.bam O=deduprg.bam RGID=group1 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=sample1
 
 
 __(*)__ Index with Picard
     
-    java -Xmx24g -Dsnappy.disable=true -jar BuildBamIndex.jar I=deduprg.bam O=deduprg.bam.bai VALIDATION_STRINGENCY=SILENT
+    java -Xmx8g -Dsnappy.disable=true -jar BuildBamIndex.jar I=deduprg.bam O=deduprg.bam.bai VALIDATION_STRINGENCY=SILENT
+
+__(*)__ Index with Picard
+    
+     java -Xmx8g -jar CollectInsertSizeMetrics.jar I=deduprg.bam O=insertSizeHistogram.txt H=insertSizeHistogram.pdf
 
 
 __(*)__ Questions
@@ -216,102 +223,72 @@ __(*)__ Questions
 
 
 
+##### Display files in IGV
 
-
-
-insert size metrics
-
-
-
-Transform SAM to BAM
-
-transform to bam
-samtools'view'–Sb'input.sam'>'tempfile.bam'
+    (Download and open) IGV
+    Load the BAM file and the VCF files into IGV
+    Look at the mapping on Chr 11
 
 
 
 
+#### Annovar
+__(*)__ First convert vcf into Annovar format
 
-Filtering%SAM/BAM%ﬁles%
+    <annovar-path>/convert2annovar.pl -format vcf4 freebayes.vcf > freebayes.avinput
 
-Required%ﬂag%(keep%if%matches)%
-samtools'view'–f'
+__(*)__ Annotate with Gene information TODODOD TEST!
+    
+    <annovar-path>/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
-Filtering%ﬂag%(remove%if%matches)
-samtools'view'–F'
+__(*)__ Annotate with Region information - ljb23
 
+     <annovar-path>/annotate_variation.pl -regionanno -dbtype ljb23_all -buildver hg19 freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
-Samtools variant calling
+__(*)__ Annotate with Region information - snp138
 
-The BCF doesn't hold actual calls
-∙ encodes likelihoods for all variants
-
-GATK variant calling
-
-freebayes variant calling
-
-varscan variant calling
+     <annovar-path>/annotate_variation.pl -regionanno -dbtype snp138 -buildver hg19 freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
 
-
-cnv
-
-*) mendelscan
+__(*)__ Questions
+* Look at the annotated VCF files.
+* What databases does "ljb23" include?
 
 
 
-structural variations
+#### SeattleSeq Annotation
+
+__(*)__ Access
+http://snp.gs.washington.edu/SeattleSeqAnnotation138/
+
+__(*)__ Annotate VCF file
+
+    Upload VCF file
+    Specify VCF as return type
+    submit
+    You should receive an annotated VCF file to the specified email address
 
 
-Filtering of variants – VCF (one liners!)
 
 
+#### ReadXplorer
 
-Annovar
-
-Web - SeattleAnnotation
-
-
-
-IGV display files
-
-
-ReadXplorer
-
-Download the ReadXplorer from
+__(*)__ Download the ReadXplorer from
 http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer/access
+
+
 
 Unzip and start it
 
 
 
-vcf merge
 
 
 
 
+#### Useful information
 
+__(*)__ Determine number of cores
 
+    cat /proc/cpuinfo
 
-
-
-
-
-
-Determine number of cores
-
-cat /proc/cpuinfo
-
-
-VCF Tools (vcf-annotate)
- Soft filter variants file for these biases
- Variants kept in the file – just annotated with potential bias affecting the
-variant
-
-
-
-
-
-How do the merged vcf files differ -> check the online documentation
-
-*) Multiple cores
