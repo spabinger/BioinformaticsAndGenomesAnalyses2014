@@ -214,6 +214,7 @@ __(*)__ VCFtools
 
 
 #### Filter variants
+__(*)__ Using vcfutils
      
      <full-path>/bcftools/vcfutils.pl varFilter -Q 20 -d 5 -D 200 samtools.vcf > samtools_filtered.vcf
 
@@ -223,7 +224,7 @@ __(*)__ Questions
 
 
 
-##### Display files in IGV
+#### Display files in IGV
 
     (Download and open) IGV
     Load the BAM file and the VCF files into IGV
@@ -258,7 +259,7 @@ __(*)__ Questions
 
 #### SeattleSeq Annotation
 
-__(*)__ Access
+__(*)__ Access<br/>
 http://snp.gs.washington.edu/SeattleSeqAnnotation138/
 
 __(*)__ Annotate VCF file
@@ -273,13 +274,15 @@ __(*)__ Annotate VCF file
 
 #### ReadXplorer
 
-__(*)__ Download the ReadXplorer from
-http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer/access
-
-
-
+__(*)__ Download the ReadXplorer from<br/>
+http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer <br/>
 Unzip and start it
 
+__(*)__ Import data
+    
+    Choose hg19.fasta as the reference
+    Add the mapping file (dedup_rg_real.bam)
+    Finish
 
 
 
