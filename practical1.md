@@ -135,6 +135,28 @@ __(*)__ Questions
      ./freebayes -f hg19.fasta -t target.bed -v freebayes.vcf deduprg.bam
 
 
+#### Varscan variant calling
+
+__(*)__ Convert to mpileup
+
+    samtools mpileup -B -f ${GEN_REF} deduprg.bam > deduprg.pileup
+
+__(*)__ Call SNPs
+
+    java -jar <varscan.jar> mpileup2snp deduprg.pileup --output-vcf 1 > varscan_snp.vcf
+
+__(*)__ Call Indels
+    
+    java -jar <varscan.jar> mpileup2indel deduprg.pileup --output-vcf 1 > varscan_indel.vcf
+
+
+__(*)__ Call CNS
+    
+    java -jar <varscan.jar> mpileup2cns  deduprg.pileup --output-vcf 1 > varscan_consensus.vcf
+
+
+
+
 
 #### GATK variant calling
 
