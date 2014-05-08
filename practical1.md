@@ -84,6 +84,12 @@ __(*)__ Inspect the BAM file in qualimap
     Check out the different pages
     What does the "Coverage across Reference" tells you?
     
+__(*)__ Hint:<br/>
+If the BAM file is too big, try to view only a subset of it<br/>
+(example with 1.000.000 rows [including header])
+
+    samtools view -h sorted.bam | head -n 1000000 | samtools view -b -S - > sorted_small.bam
+    
     
     
 #### Prepare reference genome
@@ -148,12 +154,6 @@ __(*)__ Call SNPs
 __(*)__ Call Indels
     
     java -jar <varscan.jar> mpileup2indel deduprg.pileup --output-vcf 1 > varscan_indel.vcf
-
-
-__(*)__ Call CNS
-    
-    java -jar <varscan.jar> mpileup2cns  deduprg.pileup --output-vcf 1 > varscan_consensus.vcf
-
 
 
 
