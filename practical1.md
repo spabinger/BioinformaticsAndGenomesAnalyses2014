@@ -17,7 +17,6 @@ In this practical you will get to know basic tools for SAM/BAM manipulation and 
 * Java (7) - http://www.oracle.com/technetwork/java/javase/downloads/index.html?ssSourceSiteId=otnjp
 * Picard - http://picard.sourceforge.net/command-line-overview.shtml
 * Qualimap - http://qualimap.bioinfo.cipf.es/
-* ReadXplorer - http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer
 * SAMtools - http://samtools.sourceforge.net/‎
 * Varscan 2 (2.3.6) - http://varscan.sourceforge.net/
 * VCFtools - http://vcftools.sourceforge.net/
@@ -271,27 +270,6 @@ __(*)__ Annotate VCF file
     Specify VCF as return type
     submit
     You should receive an annotated VCF file to the specified email address
-
-
-
-
-#### ReadXplorer
-
-__(*)__ Download the ReadXplorer from<br/>
-http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer <br/>
-
-    Unzip it
-    Make "bin/readxplorer" executable by changing into the directory and executing
-    chmod +x readxplorer
-    start it
-
-__(*)__ Import data
-    
-    Create a new database
-    Import data (first icon)
-    Choose hg19.fasta as the reference
-    Add the mapping file (dedup_rg_real.bam)
-    Finish
 
 
 
