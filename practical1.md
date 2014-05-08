@@ -260,7 +260,7 @@ __(*)__ Questions
 #### Annovar
 __(*)__ First convert vcf into Annovar format
 
-    <annovar-path>/convert2annovar.pl -format vcf4 freebayes.vcf > freebayes.avinput
+    <annovar-path>/convert2annovar.pl -format vcf4 -includeinfo freebayes.vcf > freebayes.avinput
 
 __(*)__ Annotate with Gene information TODODOD TEST!
     
