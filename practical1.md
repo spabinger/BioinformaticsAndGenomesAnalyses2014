@@ -274,6 +274,8 @@ __(*)__ Annotate with Region information - snp138
 
      <annovar-path>/annotate_variation.pl -regionanno -dbtype snp138 -buildver hg19 freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
+__(*)__ Try converting the output files back to VCF (check if the appropriate columns are selected in cut)
+     cat <annovar.file> | cut -f 9-18
 
 __(*)__ Questions
 * Look at the annotated VCF files.
