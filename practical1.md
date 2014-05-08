@@ -1,25 +1,27 @@
 # Practical 1
 
-In this practical you will XXXX
+In this practical you will get to know basic tools for SAM/BAM manipulation and call variants using different programs.
 
 
 
 
 ## Required tools
 
-* SAMtools - http://samtools.sourceforge.net/‎
-* GATK - https://www.broadinstitute.org/gatk/download
-* Picard - http://picard.sourceforge.net/command-line-overview.shtml
 * Annovar
   * http://www.openbioinformatics.org/annovar
   * http://www.openbioinformatics.org/annovar/annovar_download.html
   * databases: (ljb23_all, 1000g2012apr, snp138)
-* Qualimap - http://qualimap.bioinfo.cipf.es/
-* Java (7) - http://www.oracle.com/technetwork/java/javase/downloads/index.html?ssSourceSiteId=otnjp
-* IGV - https://www.broadinstitute.org/igv/home
 * Freebayes - https://github.com/ekg/freebayes
-* VCFtools - http://vcftools.sourceforge.net/
+* GATK - https://www.broadinstitute.org/gatk/download
+* IGV - https://www.broadinstitute.org/igv/home
+* Java (7) - http://www.oracle.com/technetwork/java/javase/downloads/index.html?ssSourceSiteId=otnjp
+* Picard - http://picard.sourceforge.net/command-line-overview.shtml
+* Qualimap - http://qualimap.bioinfo.cipf.es/
+* ReadXplorer - http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer
+* SAMtools - http://samtools.sourceforge.net/‎
 * Varscan 2 (2.3.6) - http://varscan.sourceforge.net/
+* VCFtools - http://vcftools.sourceforge.net/
+
 
 
 ## Information
@@ -33,7 +35,7 @@ In this practical you will XXXX
 We assume that we have a properly mapped BAM file from quality checked reads.
 For some variant callers we use a target file ADDLINK to shorten variant calling time.
 
-__Important__ After each step inspect the generated output (cat, less, head, grep, ...).
+__Important__: After each step inspect the generated output (cat, less, head, grep, ...).
 
 
 #### SAMtools
@@ -77,6 +79,7 @@ __(*)__ Index the bam file
 #### Qualimap
 __(*)__ Inspect the BAM file in qualimap
     
+    Change the heap size as described in http://qualimap.bioinfo.cipf.es/doc_html/faq.html#heapsize
     Open qualimap
     Load the BAM file (BAM QC) -> start analysis ---- Be sure to select the sorted BAM file
     Check out the different pages
@@ -276,10 +279,16 @@ __(*)__ Annotate VCF file
 
 __(*)__ Download the ReadXplorer from<br/>
 http://www.uni-giessen.de/fbz/fb08/bioinformatik/software/ReadXplorer <br/>
-Unzip and start it
+
+    Unzip it
+    Make "bin/readxplorer" executable by changing into the directory and executing
+    chmod +x readxplorer
+    start it
 
 __(*)__ Import data
     
+    Create a new database
+    Import data (first icon)
     Choose hg19.fasta as the reference
     Add the mapping file (dedup_rg_real.bam)
     Finish
