@@ -1,9 +1,6 @@
 # Practical 1
 
-In this practical you will get to know basic tools for SAM/BAM manipulation and call variants using different programs.
-
-
-[Useful information](#useful-information)
+In this practical you will get to know basic tools for SAM/BAM manipulation and call variants using different programs. Please check out the [Useful information](#useful-information) section.
 
 ## Required tools
 
