@@ -67,8 +67,8 @@ __(*)__ Now do variant calling
     java -Xmx24g -Dsnappy.disable=true -jar GenomeAnalysisTK.jar -T HaplotypeCaller -R hg19.fasta -nct 8 -L target.bed -I dedup_rg_real_recal.bam --genotyping_mode DISCOVERY -o gatk.vcf
 
 __(*)__ Questions
-* Check out the before and after plots
-* 
+* Check out the before and after plots.
+* How many variants were called?
 
 
 
