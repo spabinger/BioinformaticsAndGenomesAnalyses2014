@@ -73,7 +73,17 @@ __(*)__ Index the bam file
 
 
 #### Qualimap
+__(*)__ Run qualimap on the command line
+    
+    ./qualimap bamqc -bam sorted.bam -nt <numberOfThreads> -outdir bamqc
+
+
 __(*)__ Inspect the BAM file in qualimap
+
+    Check out the generated report. What qc features does it include?
+
+    
+__(*)__ Alternatively start the graphical interface and inspect the file using the GUI
     
     Change the heap size as described in http://qualimap.bioinfo.cipf.es/doc_html/faq.html#heapsize
     Open qualimap
