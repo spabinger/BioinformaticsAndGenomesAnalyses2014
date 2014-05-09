@@ -22,7 +22,7 @@ In this practical you will get to know basic tools for SAM/BAM manipulation and 
 
 ## Information
 
-* Original data from [1000 genomes](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/NA10847/exome_alignment/)
+* Original data from [1000 genomes](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/NA10847/exome_alignment/).
 
 
 
@@ -31,7 +31,7 @@ In this practical you will get to know basic tools for SAM/BAM manipulation and 
 We assume that we have a properly mapped BAM file from quality checked reads.
 For some variant callers we use a [target file](target.bed) to shorten variant calling time.
 
-__Important__: After each step inspect the generated output (cat, less, head, grep, ...).
+__Important:__ After each step inspect the generated output (cat, less, head, grep, ...).
 
 
 #### SAMtools
@@ -131,14 +131,27 @@ __(*)__ Questions
 
 #### SAMtools variant calling
 
+__(*)__ Call
+
      samtools mpileup -uf hg19.fasta deduprg.bam | bcftools view -vcg - > samtools.vcf
+
+__(*)__ Investigate result
+
+    #How many variant were called
+    grep -v "^#" samtools.vcf | wc -l
+    #Print the variant that are between 1-300000 
+    awk '!/^#/ && $2 < "300000"' samtools.vcf
 
 #### FreeBayes variant calling
 
+__(*)__ Call
+
      ./freebayes -f hg19.fasta -t target.bed -v freebayes.vcf deduprg.bam
 
-
-
+__(*)__ Investigate result
+  
+    #Perform the same procedures as done for samtools
+    #Do you notice differences?
 
 
 
