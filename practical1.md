@@ -3,7 +3,7 @@
 In this practical you will get to know basic tools for SAM/BAM manipulation and call variants using different programs.
 
 
-[Useful information](#Useful-information)
+[Useful information](#useful-information)
 
 ## Required tools
 
