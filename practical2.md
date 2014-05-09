@@ -18,7 +18,10 @@ __(*)__ Call Indels
     
     java -jar <varscan.jar> mpileup2indel deduprg.pileup --output-vcf 1 > varscan_indel.vcf
 
-
+__(*)__ Investigate result
+  
+    #Perform the same procedures as done for samtools
+    #How many SNPs and indels were called?
 
 
 #### GATK variant calling
