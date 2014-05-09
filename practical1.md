@@ -3,7 +3,7 @@
 In this practical you will get to know basic tools for SAM/BAM manipulation and call variants using different programs.
 
 
-
+[Useful information](#Useful-information)
 
 ## Required tools
 
@@ -151,5 +151,18 @@ __(*)__ Questions
 
 __(*)__ Determine number of cores
 
-    cat /proc/cpuinfo
+    cat /proc/cpuinfo  
+
+__(*)__ Make file executable
+
+    chmod +x <file.name>
+    
+__(*)__ Extract information from a file
+
+    grep -i "info" <file.name>
+    
+__(*)__ Extract information from a file excluding the pattern and display the first 100 lines
+
+    grep -v "^#" <file.name> | head -n 100
+
 
