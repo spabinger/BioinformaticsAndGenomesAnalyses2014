@@ -118,7 +118,8 @@ __(*)__ Using vcfutils
      <full-path>/bcftools/vcfutils.pl varFilter -Q 20 -d 5 -D 200 samtools.vcf > samtools_filtered.vcf
 
 __(*)__ Questions
-* How many variants were filtered
+* What other parameters can you specify for filtering variants?
+* How many variants were filtered?
 
 
 
@@ -154,6 +155,7 @@ __(*)__ Annotate with Region information - snp138
      freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
 __(*)__ Try converting the output files back to VCF (check if the appropriate columns are selected in cut)
+     
      cat <annovar.file> | cut -f 9-18
 
 __(*)__ Questions
