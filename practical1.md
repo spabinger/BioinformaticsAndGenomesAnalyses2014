@@ -132,14 +132,15 @@ __(*)__ Index with Picard
     
     java -Xmx8g -jar BuildBamIndex.jar I=deduprg.bam O=deduprg.bam.bai VALIDATION_STRINGENCY=SILENT
 
-__(*)__ Index with Picard
+__(*)__ Collect insert size metrics
     
      java -Xmx8g -jar CollectInsertSizeMetrics.jar I=deduprg.bam O=insertSizeHistogram.txt H=insertSizeHistogram.pdf
 
 
 __(*)__ Questions
-* How many reads were marked as duplicated?
+* How many reads were marked as duplicated? Look for flags.
 * What are the other sorting possibilities for SortSam?
+* Inspect the insert size metrics histogram.
 
 
 #### SAMtools variant calling
