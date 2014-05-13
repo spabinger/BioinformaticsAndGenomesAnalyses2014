@@ -34,7 +34,8 @@ __(*)__ Known indel sites are here specified as variables - either copy the whol
 
 __(*)__ Realignment target creator
 
-    java -Xmx8g -jar GenomeAnalysisTK.jar -T RealignerTargetCreator -R hg19.fasta -nt 8 -L target.bed -I deduprg.bam -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o target_intervals.list
+    java -Xmx8g -jar GenomeAnalysisTK.jar -T RealignerTargetCreator -R hg19.fasta -nt 8 -L target.bed 
+    -I deduprg.bam -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o target_intervals.list
 
 __(*)__ Perform realignment
     
@@ -137,9 +138,10 @@ __(*)__ First convert vcf into Annovar format
 
     <annovar-path>/convert2annovar.pl -format vcf4 -includeinfo freebayes.vcf > freebayes.avinput
 
-__(*)__ Annotate with Gene information TODODOD TEST!
+__(*)__ Annotate with Gene information
     
-    <annovar-path>/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
+    <annovar-path>/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput 
+    /home/stephan/bin/annovar/annovar/humandb/
 
 __(*)__ Annotate with Region information - ljb23
 
