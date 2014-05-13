@@ -38,33 +38,41 @@ __(*)__ Realignment target creator
 
 __(*)__ Perform realignment
     
-    java -Xmx8g -jar GenomeAnalysisTK.jar -T IndelRealigner -R hg19.fasta -I deduprg.bam -targetIntervals target_intervals.list -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o dedup_rg_real.bam
+    java -Xmx8g -jar GenomeAnalysisTK.jar -T IndelRealigner -R hg19.fasta -I deduprg.bam 
+    -targetIntervals target_intervals.list -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o dedup_rg_real.bam
 
 
 __(*)__ Base quality recalibration
     
-    java -Xmx8g -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o recal_data_table.txt -L target.bed --maximum_cycle_value 800
+    java -Xmx8g -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam 
+    -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o recal_data_table.txt -L target.bed 
+    --maximum_cycle_value 800
 
 
 __(*)__ Second pass of recalibration
      
-     java -Xmx8g -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o post_recal_data_table.txt -L target.bed --maximum_cycle_value 800 -BQSR recal_data_table.txt 
+     java -Xmx8g -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam 
+     -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o post_recal_data_table.txt 
+     -L target.bed --maximum_cycle_value 800 -BQSR recal_data_table.txt 
 
 
 __(*)__ Generate before after plots (requires R and ggplot2)
     
-    java -Xmx24g -jar GenomeAnalysisTK.jar -T AnalyzeCovariates -R hg19.fasta -L target.bed -before recal_data_table.txt -after post_recal_data_table.txt -plots recalibration_plots.pdf
+    java -Xmx24g -jar GenomeAnalysisTK.jar -T AnalyzeCovariates -R hg19.fasta -L target.bed 
+    -before recal_data_table.txt -after post_recal_data_table.txt -plots recalibration_plots.pdf
 
 
 
 __(*)__ Print recalibrated reads
     
-    java -Xmx24g -jar GenomeAnalysisTK.jar -T PrintReads -R hg19.fasta -L target.bed -I deduprgreal.bam -BQSR recal_data_table.txt -o dedup_rg_real_recal.bam
+    java -Xmx24g -jar GenomeAnalysisTK.jar -T PrintReads -R hg19.fasta -L target.bed -I deduprgreal.bam 
+    -BQSR recal_data_table.txt -o dedup_rg_real_recal.bam
 
 
 __(*)__ Now do variant calling
     
-    java -Xmx24g -jar GenomeAnalysisTK.jar -T HaplotypeCaller -R hg19.fasta -nct 8 -L target.bed -I dedup_rg_real_recal.bam --genotyping_mode DISCOVERY -o gatk.vcf
+    java -Xmx24g -jar GenomeAnalysisTK.jar -T HaplotypeCaller -R hg19.fasta -nct 8 -L target.bed 
+    -I dedup_rg_real_recal.bam --genotyping_mode DISCOVERY -o gatk.vcf
 
 __(*)__ Questions
 * Check out the before and after plots.
@@ -135,11 +143,13 @@ __(*)__ Annotate with Gene information TODODOD TEST!
 
 __(*)__ Annotate with Region information - ljb23
 
-     <annovar-path>/annotate_variation.pl -regionanno -dbtype ljb23_all -buildver hg19 freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
+     <annovar-path>/annotate_variation.pl -regionanno -dbtype ljb23_all -buildver hg19 
+     freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
 __(*)__ Annotate with Region information - snp138
 
-     <annovar-path>/annotate_variation.pl -regionanno -dbtype snp138 -buildver hg19 freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
+     <annovar-path>/annotate_variation.pl -regionanno -dbtype snp138 -buildver hg19 
+     freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
 __(*)__ Try converting the output files back to VCF (check if the appropriate columns are selected in cut)
      cat <annovar.file> | cut -f 9-18
