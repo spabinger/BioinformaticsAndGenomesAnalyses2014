@@ -35,6 +35,7 @@ For some variant callers we use a [target file](target.bed) to shorten variant c
 
 * After each step inspect the generated output (cat, less, head, grep, ...).
 * Organize your data and results in folders.
+* Check out the specified parameters. If you don't know the exact meaning, consult the help pages (-h, --help).
 
 
 #### SAMtools
