@@ -31,7 +31,10 @@ In this practical you will get to know basic tools for SAM/BAM manipulation and 
 We assume that we have a properly mapped BAM file from quality checked reads.
 For some variant callers we use a [target file](target.bed) to shorten variant calling time.
 
-__Important:__ After each step inspect the generated output (cat, less, head, grep, ...).
+#### Important
+
+* After each step inspect the generated output (cat, less, head, grep, ...).
+* Organize your data and results in folders.
 
 
 #### SAMtools
