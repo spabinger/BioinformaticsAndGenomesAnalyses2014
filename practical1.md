@@ -115,22 +115,22 @@ __(*)__ Prepare fai index
 #### BAM file preparations
 __(*)__ Sort with Picard
     
-    java -Xmx8g -Dsnappy.disable=true -jar SortSam.jar I=aln.bam O=sorted_picard.bam SORT_ORDER=coordinate
+    java -Xmx8g -jar SortSam.jar I=aln.bam O=sorted_picard.bam SORT_ORDER=coordinate
 
 
 __(*)__ Mark duplicates
      
-    java -Xmx8g -Dsnappy.disable=true -jar MarkDuplicates.jar I=sorted_picard.bam O=dedup.bam M=metrics.txt
+    java -Xmx8g -jar MarkDuplicates.jar I=sorted_picard.bam O=dedup.bam M=metrics.txt
 
 
 __(*)__ Add ReadGroup
     
-    java -Xmx8g -Dsnappy.disable=true -jar AddOrReplaceReadGroups.jar I= dedup.bam O=deduprg.bam RGID=group1 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=sample1
+    java -Xmx8g -jar AddOrReplaceReadGroups.jar I= dedup.bam O=deduprg.bam RGID=group1 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=sample1
 
 
 __(*)__ Index with Picard
     
-    java -Xmx8g -Dsnappy.disable=true -jar BuildBamIndex.jar I=deduprg.bam O=deduprg.bam.bai VALIDATION_STRINGENCY=SILENT
+    java -Xmx8g -jar BuildBamIndex.jar I=deduprg.bam O=deduprg.bam.bai VALIDATION_STRINGENCY=SILENT
 
 __(*)__ Index with Picard
     
