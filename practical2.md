@@ -144,28 +144,38 @@ __(*)__ Questions
 
 
 #### Annovar
+
+###### All in one
+
+__(*)__ Run all in one operation
+
+    table_annovar.pl freebayes.vcf /bcga2016/annovar/annovar/humandb/ -buildver hg19 -out myanno -remove -protocol 1000g2014oct_all,1000g2014oct_afr,1000g2014oct_eas,1000g2014oct_eur,snp138 -operation f,f,f,f,f -nastring . -vcfinput
+
+###### Fine grained
+
 __(*)__ First convert vcf into Annovar format
 
     <annovar-path>/convert2annovar.pl -format vcf4 -includeinfo freebayes.vcf > freebayes.avinput
 
+
 __(*)__ Annotate with Gene information
     
     <annovar-path>/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput 
-    /home/stephan/bin/annovar/annovar/humandb/
+    /bcga2016/annovar/annovar/humandb/
 
 
 __(*)__ Annotate with Region information - snp138
+    
+    Check if the snp138 annotation db is correctly unzipped
 
      <annovar-path>/annotate_variation.pl -regionanno -dbtype snp138 -buildver hg19 
-     freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
+     freebayes.avinput /bcga2016/annovar/annovar/humandb/
 
-__(*)__ Try converting the output files back to VCF (check if the appropriate columns are selected in cut)
-     
-     cat <annovar.file> | cut -f 9-18
+
 
 __(*)__ Questions
 * Look at the annotated VCF files.
-* What databases does "ljb23" include?
+* What databases does "ljb23" include - check the website?
 
 
 
