@@ -90,18 +90,22 @@ __(*)__ Questions
 
 __(*)__ VCFlib - merge
 
+    module add XYZ
     vcfcombine freebayes.vcf gatk.vcf samtools.vcf > vcf_lib_merged.vcf
 
 __(*)__ VCFlib - stats - shown here for one VCF file - repeat for all 3
 
-    vcfstats freeb_call.vcf > freeb_call_vcf_lib_stats.txt
+    vcfstats freebayes.vcf > freebayes_vcf_lib_stats.txt
 
 
 
 __(*)__ VCFtools
 
-    export PERL5LIB=<full-path>/vcftools_0.1.12a/perl
+    export PERL5LIB=<full-path>/vcftools_0.1.12a/share/perl5/
+    e.g. export PERL5LIB=/bcga2016/vcftools-0.1.14/share/perl5/
+    
     export PATH=<full-path>/tabix/tabix-0.2.6:$PATH
+    e.g. export PATH=/bcga2016/tabix/tabix-0.2.6:$PATH
 
     ## Index (tabix) and pack files
     cp gatk.vcf gatk_tab.vcf
@@ -149,10 +153,6 @@ __(*)__ Annotate with Gene information
     <annovar-path>/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput 
     /home/stephan/bin/annovar/annovar/humandb/
 
-__(*)__ Annotate with Region information - ljb23
-
-     <annovar-path>/annotate_variation.pl -regionanno -dbtype ljb23_all -buildver hg19 
-     freebayes.avinput /home/stephan/bin/annovar/annovar/humandb/
 
 __(*)__ Annotate with Region information - snp138
 
